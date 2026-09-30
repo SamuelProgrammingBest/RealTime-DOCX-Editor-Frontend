@@ -33,7 +33,7 @@ export default function DocumentPage() {
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
-    const socketInstance = io("http://localhost:4500", {
+    const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URI!, {
       withCredentials: true,
     });
     const handleActiveUsers = (activeUsers: unknown) => {
