@@ -223,7 +223,7 @@ export default function Home() {
     setIsSubmitting(true);
 
     try {
-      const path = isRegistering ? "/signup" : "/login";
+      const path = isRegistering ? "/signup" : "/login"; 
       const payload = isRegistering
         ? form
         : { email: form.email, password: form.password };
