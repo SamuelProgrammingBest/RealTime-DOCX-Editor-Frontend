@@ -2,28 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 // import type { NextRequest } from 'next/request';
 
 export default function middleware(request: NextRequest) {
-  // 1. Get the cookie directly from the request headers
   const token = request.cookies.get('token')?.value; 
-
-  // 2. Define the path you are trying to protect
   const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard');
 
-  // 3. Redirect to login if a guest tries to access a protected page
+  // 1. If trying to access dashboard without a token, redirect to home
   if (isDashboardRoute && !token) {
-    return NextResponse.redirect(new URL('/', request.url));
+    const response = NextResponse.redirect(new URL('/', request.url));
+    // Prevent edge caching of the redirect
+    response.headers.set('x-middleware-cache', 'no-cache');
+    return response;
   }
 
-  // 4. Redirect to dashboard if a logged-in user tries to visit login/signup
-//   const isAuthRoute = ['/login', '/signup'].includes(request.nextUrl.pathname);
-//   if (isAuthRoute && token) {
-//     return NextResponse.redirect(new URL('/dashboard', request.url));
-//   }
-
-  return NextResponse.next();
+  // 2. Allow the request to proceed normally, but disable middleware caching 
+  // so it reads newly set cross-domain cookies instantly without failing
+  const response = NextResponse.next();
+  response.headers.set('x-middleware-cache', 'no-cache');
+  return response;
 }
 
-// Limit the middleware to run only on specific routes (avoids static files/images)
 export const config = {
   matcher: ['/dashboard/:path*', '/'],
 };
-// Use code with caution
