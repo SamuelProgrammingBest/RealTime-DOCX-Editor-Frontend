@@ -1,4 +1,4 @@
-Real-Time DOCX Editor: Collaborative Document Editor - Frontend
+# Real-Time DOCX Editor: Collaborative Document Editor - Frontend
 A lightweight, Next.js-based frontend for a real-time collaborative rich-text document editor. Powered by BlockNote and Yjs, it delivers character-level CRDT text merging, real-time remote colored cursors, and live active-user presence indicators without depending on heavy third-party cloud collaboration providers.
 🚀 Features
 • Rich-Text Block Editing: Full-featured block-based document editing built on top of BlockNote (@blocknote/react & @blocknote/mantine).
