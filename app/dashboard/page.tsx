@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { isAxiosError } from "axios";
 import {
   ArrowDownWideNarrow,
   AlertTriangle,
@@ -30,6 +32,7 @@ import {
 import Link from "next/link";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [query, setQuery] = useState("");
   const [user, setUser] = useState<DashboardUser | null>(null);
@@ -62,9 +65,21 @@ export default function DashboardPage() {
         setLoadError(false);
         const response = await getLoggedInUserandDocuments();
         if (!response) throw new Error("Dashboard response was empty.");
-        setUser(getUser(response[0]));
+        const loggedInUser = getUser(response[0]);
+        if (!loggedInUser) {
+          router.replace("/");
+          return;
+        }
+        setUser(loggedInUser);
         setDocuments(normalizeDocuments(response[1]));
-      } catch {
+      } catch (error) {
+        if (
+          isAxiosError(error) &&
+          (error.response?.status === 401 || error.response?.status === 403)
+        ) {
+          router.replace("/");
+          return;
+        }
         setUser(null);
         setLoadError(true);
       } finally {
@@ -73,7 +88,7 @@ export default function DashboardPage() {
     };
 
     fetchUserAndDocuments();
-  }, [retryCount]);
+  }, [retryCount, router]);
 
   const handleCreateDocument = async () => {
     try {

@@ -1,21 +1,9 @@
 import { apiCall } from "./apiCall";
 
 export const getLoggedInUserandDocuments = async () => {
-  try {
-    // const response = {}
-    // await apiCall("/me", "GET")
-
-    const response = await Promise.all([
-      await apiCall("/me", "GET"),
-      await apiCall("/docs", "GET"),
-    ]);
-
-    return response;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Dashboard related API Error ${error.message}`);
-    }
-  }
+  const user = await apiCall("/me", "GET");
+  const documents = await apiCall("/docs", "GET");
+  return [user, documents] as const;
 };
 
 export const createDocument = async () => {
