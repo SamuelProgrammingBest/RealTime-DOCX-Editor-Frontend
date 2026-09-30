@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
@@ -206,6 +206,19 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isRegistering = mode === "register";
 
+  useEffect(() => {
+    if (
+      new URLSearchParams(window.location.search).get("auth") === "required"
+    ) {
+      startTransition(() => {
+        setMode("login");
+        setFormError(
+          "Your session was not recognized. Please log in again. If this keeps happening, your browser may be blocking cross-site cookies.",
+        );
+      });
+    }
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({
@@ -221,9 +234,10 @@ export default function Home() {
     setFormError("");
     setFieldErrors({});
     setIsSubmitting(true);
+    let accountCreated = false;
 
     try {
-      const path = isRegistering ? "/signup" : "/login"; 
+      const path = isRegistering ? "/signup" : "/login";
       const payload = isRegistering
         ? form
         : { email: form.email, password: form.password };
@@ -234,10 +248,35 @@ export default function Home() {
         setFieldErrors(responseError.fieldErrors);
         return;
       }
+
+      if (isRegistering) {
+        accountCreated = true;
+        const loginResponse = await apiCall<unknown>("/login", "POST", {
+          email: form.email,
+          password: form.password,
+        });
+        const loginError = getAuthResponseError(loginResponse, "login");
+        if (loginError) {
+          setMode("login");
+          setFormError(
+            `Your account was created, but automatic sign-in failed. ${loginError.message}`,
+          );
+          setFieldErrors(loginError.fieldErrors);
+          return;
+        }
+      }
+
       router.push(getPostAuthPath(window.location.search));
     } catch (error) {
-      const authError = getAuthError(error, mode);
-      setFormError(authError.message);
+      const authError = getAuthError(error, accountCreated ? "login" : mode);
+      if (accountCreated) {
+        setMode("login");
+        setFormError(
+          `Your account was created, but automatic sign-in failed. ${authError.message}`,
+        );
+      } else {
+        setFormError(authError.message);
+      }
       setFieldErrors(authError.fieldErrors);
     } finally {
       setIsSubmitting(false);

@@ -59,6 +59,7 @@ export default function DocsEditor({
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState(false);
   const [contentLoadError, setContentLoadError] = useState(false);
+  const [prefersDarkMode, setPrefersDarkMode] = useState(false);
   const [activeStyles, setActiveStyles] = useState({
     bold: false,
     italic: false,
@@ -67,6 +68,15 @@ export default function DocsEditor({
   });
 
   const provider = new SimpleCustomProvider(ydoc);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const updateColorScheme = () => setPrefersDarkMode(mediaQuery.matches);
+    updateColorScheme();
+    mediaQuery.addEventListener("change", updateColorScheme);
+
+    return () => mediaQuery.removeEventListener("change", updateColorScheme);
+  }, []);
 
   // 2. INITIALIZE BLOCKNOTE WTH MOCKED STABLE BINDINGS
   const editor = useCreateBlockNote({
@@ -417,7 +427,7 @@ export default function DocsEditor({
 
       <BlockNoteView
         editor={editor}
-        theme="light"
+        theme={prefersDarkMode ? "dark" : "light"}
         onSelectionChange={() => {
           const styles = editor.getActiveStyles();
           const block = editor.getTextCursorPosition().block;

@@ -22,7 +22,7 @@ export const apiCall = async <TResponse = any>(
     data: method === "GET" ? undefined : body,
     headers,
     withCredentials,
-    timeout: 10_000,
+    timeout: 60_000,
   });
 
   return response.data;

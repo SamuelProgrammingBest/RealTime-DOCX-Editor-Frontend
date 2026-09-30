@@ -34,3 +34,55 @@
     font-family: "Nunito", "Quicksand", sans-serif;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #171b19;
+    color: #f1f4ef;
+  }
+
+  [class~="bg-white"],
+  [class~="bg-[#FFFAEE]"],
+  [class~="bg-[#fffaf0]"] {
+    background-color: #242a27;
+  }
+
+  [class~="bg-[#FFFAEE]/70"] {
+    background-color: #303834;
+  }
+
+  [class~="bg-[#FFFAEE]/35"] {
+    background-color: #303834;
+  }
+
+  [class*="bg-[#282828]/"] {
+    background-color: #ffffff1a;
+  }
+
+  [class*="text-[#282828]/"] {
+    color: #b5c0b9;
+  }
+
+  [class~="text-[#282828]"] {
+    color: #f1f4ef;
+  }
+
+  [class*="border-[#282828]"] {
+    border-color: #76827a;
+  }
+
+  [class~="text-[#8F1515]"],
+  [class~="text-[#B42318]"],
+  [class~="text-[#C62828]"] {
+    color: #ff9b93;
+  }
+
+  [class*="shadow-neobrutalism"],
+  [class*="shadow-["] {
+    box-shadow: 4px 4px 0 #0c100e;
+  }
+}

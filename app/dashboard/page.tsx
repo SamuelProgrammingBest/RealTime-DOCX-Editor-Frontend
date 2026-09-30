@@ -67,7 +67,7 @@ export default function DashboardPage() {
         if (!response) throw new Error("Dashboard response was empty.");
         const loggedInUser = getUser(response[0]);
         if (!loggedInUser) {
-          router.replace("/");
+          router.replace("/?auth=required");
           return;
         }
         setUser(loggedInUser);
@@ -77,7 +77,7 @@ export default function DashboardPage() {
           isAxiosError(error) &&
           (error.response?.status === 401 || error.response?.status === 403)
         ) {
-          router.replace("/");
+          router.replace("/?auth=required");
           return;
         }
         setUser(null);
@@ -96,6 +96,7 @@ export default function DashboardPage() {
       setCreateError(false);
       await createDocumentRequest();
       setDocuments(normalizeDocuments(await getDocuments()));
+      router.push(`/docs/${documents[documents.length - 1].id}`);
     } catch {
       setCreateError(true);
     } finally {
