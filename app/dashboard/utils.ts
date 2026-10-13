@@ -101,6 +101,14 @@ function getSingleDocument(value: unknown): ApiDocument | null {
   return null;
 }
 
+export function getDocumentId(value: unknown): string | null {
+  const document = getSingleDocument(value);
+  const id = document?._id ?? document?.id ?? document?.linkId;
+  if (typeof id === "string" && id.trim()) return id;
+  if (typeof id === "number") return String(id);
+  return null;
+}
+
 function formatUpdatedDate(value?: string): string {
   if (!value) return "Date unavailable";
   const date = new Date(value);

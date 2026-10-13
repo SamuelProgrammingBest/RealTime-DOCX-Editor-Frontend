@@ -24,6 +24,7 @@ import {
   getLoggedInUserandDocuments,
 } from "@/utils/getDashboard";
 import {
+  getDocumentId,
   getUser,
   normalizeDocuments,
   type DashboardUser,
@@ -95,9 +96,23 @@ export default function DashboardPage() {
     try {
       setIsCreating(true);
       setCreateError(false);
-      await createDocumentRequest();
-      setDocuments(normalizeDocuments(await getDocuments()));
-      router.push(`/docs/${documents[0].id}`);
+      const createdDocument = await createDocumentRequest();
+      let documentId = getDocumentId(createdDocument);
+
+      if (!documentId) {
+        const refreshedDocuments = normalizeDocuments(await getDocuments());
+        setDocuments(refreshedDocuments);
+        const existingIds = new Set(documents.map((document) => document.id));
+        documentId = refreshedDocuments.find(
+          (document) => !existingIds.has(document.id),
+        )?.id ?? null;
+      }
+
+      if (!documentId) {
+        throw new Error("The newly created document could not be identified.");
+      }
+
+      router.push(`/docs/${encodeURIComponent(documentId)}`);
     } catch {
       setCreateError(true);
     } finally {
