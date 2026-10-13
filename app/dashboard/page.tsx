@@ -30,6 +30,7 @@ import {
   type DocumentItem,
 } from "./utils";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -132,11 +133,14 @@ export default function DashboardPage() {
         className="min-h-screen px-4 py-5 sm:px-8 sm:py-8"
       >
         <div className="mx-auto max-w-7xl">
-          <header className="flex items-center gap-3 border-b-4 border-[#282828] pb-5">
-            <span className="flex size-11 items-center justify-center rounded-2xl border-4 border-[#282828] bg-[#58CC02] shadow-neobrutalism">
-              <BookOpenText aria-hidden="true" size={23} strokeWidth={2.5} />
-            </span>
-            <span className="text-xl font-black sm:text-2xl">Draftwell</span>
+          <header className="flex items-center justify-between gap-3 border-b-4 border-[#282828] pb-5">
+            <div className="flex items-center gap-3">
+              <span className="flex size-11 items-center justify-center rounded-2xl border-4 border-[#282828] bg-[#58CC02] shadow-neobrutalism">
+                <BookOpenText aria-hidden="true" size={23} strokeWidth={2.5} />
+              </span>
+              <span className="text-xl font-black sm:text-2xl">Draftwell</span>
+            </div>
+            <ThemeToggle />
           </header>
           <div className="mt-10 animate-pulse">
             <div className="h-4 w-28 rounded bg-[#282828]/15" />
@@ -185,6 +189,9 @@ export default function DashboardPage() {
           >
             Try again
           </button>
+          <div className="mt-4 flex justify-center">
+            <ThemeToggle />
+          </div>
         </section>
       </main>
     );
@@ -210,6 +217,7 @@ export default function DashboardPage() {
         </a>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <span className="hidden text-sm font-bold text-[#282828]/65 sm:block">
             Your workspace
           </span>

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { apiCall } from "@/utils/apiCall";
 import { getPostAuthPath } from "@/utils/authRedirect";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type AuthMode = "login" | "register";
 type FormValues = {
@@ -305,17 +306,20 @@ export default function Home() {
           </span>
         </a>
 
-        <div className="flex items-center gap-2 text-sm font-bold sm:gap-3 sm:text-base">
-          <span className="hidden text-[#282828]/70 sm:inline">
-            {isRegistering ? "Already have an account?" : "New to Draftwell?"}
-          </span>
-          <button
-            type="button"
-            onClick={() => setMode(isRegistering ? "login" : "register")}
-            className="rounded-2xl border-4 border-[#282828] bg-white px-4 py-2 shadow-neobrutalism transition-transform hover:-translate-y-0.5"
-          >
-            {isRegistering ? "Log in" : "Create account"}
-          </button>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle />
+          <div className="flex items-center gap-2 text-sm font-bold sm:gap-3 sm:text-base">
+            <span className="hidden text-[#282828]/70 sm:inline">
+              {isRegistering ? "Already have an account?" : "New to Draftwell?"}
+            </span>
+            <button
+              type="button"
+              onClick={() => setMode(isRegistering ? "login" : "register")}
+              className="rounded-2xl border-4 border-[#282828] bg-white px-4 py-2 shadow-neobrutalism transition-transform hover:-translate-y-0.5"
+            >
+              {isRegistering ? "Log in" : "Create account"}
+            </button>
+          </div>
         </div>
       </header>
 

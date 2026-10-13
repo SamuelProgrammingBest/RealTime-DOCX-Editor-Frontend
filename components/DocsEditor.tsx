@@ -24,6 +24,7 @@ import { base64ToUint8Array } from "@/app/dashboard/utils";
 import { editorSchema } from "@/utils/editorSchema";
 import EventEmitter from "events";
 import { apiCall } from "@/utils/apiCall";
+import { useTheme } from "@/components/ThemeProvider";
 
 // 1. SIMPLE MOCK PROVIDER WITHOUT AWARENESS TO COMPLETELY PREVENT CURSOR CRASHES
 export class SimpleCustomProvider extends EventEmitter {
@@ -59,24 +60,15 @@ export default function DocsEditor({
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState(false);
   const [contentLoadError, setContentLoadError] = useState(false);
-  const [prefersDarkMode, setPrefersDarkMode] = useState(false);
   const [activeStyles, setActiveStyles] = useState({
     bold: false,
     italic: false,
     underline: false,
     strike: false,
   });
+  const { resolvedTheme } = useTheme();
 
   const provider = new SimpleCustomProvider(ydoc);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const updateColorScheme = () => setPrefersDarkMode(mediaQuery.matches);
-    updateColorScheme();
-    mediaQuery.addEventListener("change", updateColorScheme);
-
-    return () => mediaQuery.removeEventListener("change", updateColorScheme);
-  }, []);
 
   // 2. INITIALIZE BLOCKNOTE WTH MOCKED STABLE BINDINGS
   const editor = useCreateBlockNote({
@@ -427,7 +419,7 @@ export default function DocsEditor({
 
       <BlockNoteView
         editor={editor}
-        theme={prefersDarkMode ? "dark" : "light"}
+        theme={resolvedTheme}
         onSelectionChange={() => {
           const styles = editor.getActiveStyles();
           const block = editor.getTextCursorPosition().block;

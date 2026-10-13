@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { io, type Socket } from "socket.io-client";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type DocumentData = {
   title?: string;
@@ -129,6 +130,7 @@ export default function DocumentPage() {
               <span>Sign in to edit</span>
             </Link>
           )}
+          <ThemeToggle />
           <div className="flex items-center" aria-label="Active collaborators">
             {collaborators.slice(0, 4).map((collaborator, index) => (
               <CollaboratorAvatar

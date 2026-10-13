@@ -2,10 +2,48 @@
 @import "tailwindcss";
 @config "../tailwind.config.mjs";
 
+:root {
+  color-scheme: light;
+  --page-background: #fffaee;
+  --surface-background: #ffffff;
+  --surface-muted: #fffaee;
+  --text-primary: #282828;
+  --text-secondary: #686868;
+  --border-color: #282828;
+  --error-color: #c62828;
+  --shadow-color: #282828;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-background: #171b19;
+  --surface-background: #242a27;
+  --surface-muted: #303834;
+  --text-primary: #f1f4ef;
+  --text-secondary: #b5c0b9;
+  --border-color: #76827a;
+  --error-color: #ff9b93;
+  --shadow-color: #0c100e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page-background: #171b19;
+    --surface-background: #242a27;
+    --surface-muted: #303834;
+    --text-primary: #f1f4ef;
+    --text-secondary: #b5c0b9;
+    --border-color: #76827a;
+    --error-color: #ff9b93;
+    --shadow-color: #0c100e;
+  }
+}
+
 @layer base {
   body {
-    background-color: #fffaee;
-    color: #282828;
+    background-color: var(--page-background);
+    color: var(--text-primary);
     font-family: "Nunito", "Quicksand", sans-serif;
   }
 
@@ -35,54 +73,70 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-  }
+[class~="bg-white"],
+[class~="bg-[#FFFAEE]"],
+[class~="bg-[#fffaf0]"] {
+  background-color: var(--surface-background);
+}
 
-  body {
-    background-color: #171b19;
-    color: #f1f4ef;
-  }
+[class~="bg-[#FFFAEE]/70"],
+[class~="bg-[#FFFAEE]/35"],
+[class~="bg-[#fffaf0]/95"] {
+  background-color: var(--surface-muted);
+}
 
-  [class~="bg-white"],
-  [class~="bg-[#FFFAEE]"],
-  [class~="bg-[#fffaf0]"] {
-    background-color: #242a27;
-  }
+[class~="bg-[#58CC02]"],
+[class~="bg-[#1CB0F6]"],
+[class~="bg-[#FFC800]"],
+[class~="bg-[#CE82FF]"],
+[class~="bg-[#FF4B4B]"] {
+  color: #282828;
+}
 
-  [class~="bg-[#FFFAEE]/70"] {
-    background-color: #303834;
-  }
+[class~="bg-[#58CC02]"] [class~="text-[#282828]"],
+[class~="bg-[#1CB0F6]"] [class~="text-[#282828]"],
+[class~="bg-[#FFC800]"] [class~="text-[#282828]"],
+[class~="bg-[#CE82FF]"] [class~="text-[#282828]"],
+[class~="bg-[#FF4B4B]"] [class~="text-[#282828]"] {
+  color: #282828;
+}
 
-  [class~="bg-[#FFFAEE]/35"] {
-    background-color: #303834;
-  }
+[class~="bg-[#58CC02]"] [class*="text-[#282828]/"],
+[class~="bg-[#1CB0F6]"] [class*="text-[#282828]/"],
+[class~="bg-[#FFC800]"] [class*="text-[#282828]/"],
+[class~="bg-[#CE82FF]"] [class*="text-[#282828]/"],
+[class~="bg-[#FF4B4B]"] [class*="text-[#282828]/"] {
+  color: #484848;
+}
 
-  [class*="bg-[#282828]/"] {
-    background-color: #ffffff1a;
-  }
+[class~="hover:bg-[#FFFAEE]/70"]:hover {
+  background-color: var(--surface-muted);
+}
 
-  [class*="text-[#282828]/"] {
-    color: #b5c0b9;
-  }
+[class*="bg-[#282828]/"] {
+  background-color: color-mix(in srgb, var(--text-primary) 10%, transparent);
+}
 
-  [class~="text-[#282828]"] {
-    color: #f1f4ef;
-  }
+[class*="text-[#282828]/"] {
+  color: var(--text-secondary);
+}
 
-  [class*="border-[#282828]"] {
-    border-color: #76827a;
-  }
+[class~="text-[#282828]"] {
+  color: var(--text-primary);
+}
 
-  [class~="text-[#8F1515]"],
-  [class~="text-[#B42318]"],
-  [class~="text-[#C62828]"] {
-    color: #ff9b93;
-  }
+[class*="border-[#282828]"],
+input {
+  border-color: var(--border-color);
+}
 
-  [class*="shadow-neobrutalism"],
-  [class*="shadow-["] {
-    box-shadow: 4px 4px 0 #0c100e;
-  }
+[class~="text-[#8F1515]"],
+[class~="text-[#B42318]"],
+[class~="text-[#C62828]"] {
+  color: var(--error-color);
+}
+
+[class*="shadow-neobrutalism"],
+[class*="shadow-["] {
+  box-shadow: 4px 4px 0 var(--shadow-color);
 }
