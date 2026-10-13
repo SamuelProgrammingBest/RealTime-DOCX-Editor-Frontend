@@ -97,7 +97,7 @@ export default function DashboardPage() {
       setCreateError(false);
       await createDocumentRequest();
       setDocuments(normalizeDocuments(await getDocuments()));
-      router.push(`/docs/${documents[documents.length - 1].id}`);
+      router.push(`/docs/${documents[0].id}`);
     } catch {
       setCreateError(true);
     } finally {
